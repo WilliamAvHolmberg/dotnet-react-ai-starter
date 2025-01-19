@@ -1,19 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../shared/components/ui/button';
-import { useGetCurrentUser, useLogout } from '../api';
+import { useAuth } from '../context/auth-context';
 
 export const AuthStatus = () => {
   const navigate = useNavigate();
-  const { data: user } = useGetCurrentUser();
-  const { mutate: logout, isPending: isLoggingOut } = useLogout();
-
-  const handleLogout = () => {
-    logout(undefined, {
-      onSuccess: () => {
-        navigate('/login');
-      },
-    });
-  };
+  const { user, isLoading, logout } = useAuth();
 
   // If we have a user, show their info and logout button
   if (user) {
@@ -22,10 +13,10 @@ export const AuthStatus = () => {
         <span className="text-sm text-gray-700">{user.email}</span>
         <Button 
           variant="ghost" 
-          onClick={handleLogout}
-          disabled={isLoggingOut}
+          onClick={logout}
+          disabled={isLoading}
         >
-          {isLoggingOut ? 'Signing out...' : 'Sign Out'}
+          {isLoading ? 'Signing out...' : 'Sign Out'}
         </Button>
       </div>
     );

@@ -21,6 +21,65 @@
 #    - Active/pressed states for buttons
 #    - Focus states for form elements
 
+# Authentication & Authorization Guidelines
+# ======================================
+# 1. Auth State Management
+#    - Centralized auth context in features/auth/context
+#    - No global redirects on 401s
+#    - Graceful unauthorized state handling
+#    - Clear loading states during auth checks
+#
+# 2. Protected Routes
+#    - Use AuthGuard component for protection
+#    - Show helpful unauthorized messages
+#    - Preserve attempted URLs for post-login redirect
+#    - Handle nested route protection
+#
+# 3. Auth UI/UX
+#    - Clear authentication status in header
+#    - Smooth login/logout transitions
+#    - Helpful error messages
+#    - Proper loading states
+#
+# 4. API Integration
+#    - Generated auth hooks from API spec
+#    - Proper error handling
+#    - No retries on 401s
+#    - Type-safe auth state
+
+# Route Structure Guidelines
+# ========================
+# 1. Route Configuration
+#    - Centralized in src/routes.tsx
+#    - Type-safe route definitions
+#    - Feature-based organization
+#    - Clear auth requirements
+#
+# 2. Route Interface
+#   ```typescript
+#   interface RouteConfig {
+#     path: string;
+#     element: React.ReactNode;
+#     isHeaderItem?: boolean;
+#     requiresAuth?: boolean;
+#     icon?: React.ReactNode;
+#     label?: string;
+#     children?: RouteConfig[];
+#   }
+#   ```
+#
+# 3. Route Organization
+#    - Group by feature
+#    - Clear hierarchy
+#    - Consistent metadata
+#    - Proper nesting
+#
+# 4. Navigation
+#    - Header items from route config
+#    - Consistent active states
+#    - Clear navigation patterns
+#    - Type-safe links
+
 # Frontend Utilities Organization
 # =============================
 # All shared utilities are in src/shared/utils:

@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Logging;
-using Api.Features.SMS.Configuration;
-using Api.Features.SMS.Services;
 
 namespace Api.Shell;
 
@@ -123,11 +121,6 @@ public partial class Program
                 return Task.CompletedTask;
             };
         });
-
-        // Add SMS service configuration and client
-        builder.Services.Configure<ElksOptions>(
-            builder.Configuration.GetSection(ElksOptions.SectionName));
-        builder.Services.AddHttpClient<ISMSService, SMSService>();
 
         var app = builder.Build();
 

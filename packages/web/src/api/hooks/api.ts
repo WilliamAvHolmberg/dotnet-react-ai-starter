@@ -31,8 +31,6 @@ import type {
   GetApiUsersParams,
   LoginRequestDTO,
   LoginResponseDTO,
-  SendSMSRequestDTO,
-  SendSMSResponseDTO,
   UpdateUserRequestDTO,
   UserListResponseDTO,
   UserProfileResponseDTO,
@@ -292,59 +290,6 @@ export function useGetApiAuthMe<TData = Awaited<ReturnType<typeof getApiAuthMe>>
 
 
 
-export const postApiSMSSend = (
-    sendSMSRequestDTO: SendSMSRequestDTO,
- signal?: AbortSignal
-) => {
-      
-      
-      return customClient<SendSMSResponseDTO>(
-      {url: `/api/SMS/send`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: sendSMSRequestDTO, signal
-    },
-      );
-    }
-  
-
-
-export const getPostApiSMSSendMutationOptions = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiSMSSend>>, TError,{data: SendSMSRequestDTO}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof postApiSMSSend>>, TError,{data: SendSMSRequestDTO}, TContext> => {
-const {mutation: mutationOptions} = options ?? {};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiSMSSend>>, {data: SendSMSRequestDTO}> = (props) => {
-          const {data} = props ?? {};
-
-          return  postApiSMSSend(data,)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type PostApiSMSSendMutationResult = NonNullable<Awaited<ReturnType<typeof postApiSMSSend>>>
-    export type PostApiSMSSendMutationBody = SendSMSRequestDTO
-    export type PostApiSMSSendMutationError = ErrorType<unknown>
-
-    export const usePostApiSMSSend = <TError = ErrorType<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiSMSSend>>, TError,{data: SendSMSRequestDTO}, TContext>, }
-): UseMutationResult<
-        Awaited<ReturnType<typeof postApiSMSSend>>,
-        TError,
-        {data: SendSMSRequestDTO},
-        TContext
-      > => {
-
-      const mutationOptions = getPostApiSMSSendMutationOptions(options);
-
-      return useMutation(mutationOptions);
-    }
-    
 export const getApiUsers = (
     params?: GetApiUsersParams,
  signal?: AbortSignal
