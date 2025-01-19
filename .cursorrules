@@ -1,0 +1,377 @@
+# Visual Feedback Guidelines
+# =========================
+# Every user interaction MUST include:
+# 1. Progress Indicators
+#    - Loading states for async operations
+#    - Disabled states during processing
+#    - Animated transitions for state changes
+#
+# 2. Success Feedback
+#    - Visual confirmation (checkmark, green indicators)
+#    - Success messages via toast/notification
+#    - Smooth transitions to next state
+#
+# 3. Error Feedback
+#    - Clear error messages via toast/notification
+#    - Visual error states (red outlines, warning icons)
+#    - Recovery instructions when applicable
+#
+# 4. Interaction Feedback
+#    - Hover states for interactive elements
+#    - Active/pressed states for buttons
+#    - Focus states for form elements
+
+# Frontend Utilities Organization
+# =============================
+# All shared utilities are in src/shared/utils:
+# - Location: src/shared/utils/utils.ts
+# - Common utilities:
+#   - cn: Class merging with tailwind-merge
+#   - Date formatting
+#   - Type helpers
+#   - Common calculations
+# Example:
+#   import { cn } from "@/shared/utils/utils"
+#   className={cn("base-class", condition && "conditional-class")}
+
+# API Model Naming Conventions
+# ===========================
+# All generated models follow strict naming:
+# - Request DTOs: [Name]RequestDTO
+# - Response DTOs: [Name]ResponseDTO
+# Example:
+#   - LoginRequestDTO (not LoginRequest)
+#   - LoginResponseDTO (not LoginResponse)
+#   - UserProfileResponseDTO (not User or UserProfile)
+
+# API Hooks Organization
+# =====================
+# All API hooks are generated in a single file:
+# - Location: src/api/hooks/api.ts
+# - Naming: use[Operation][Path]
+# Example:
+#   - usePostApiAuthLogin (not useLogin)
+#   - useGetApiAuthMe (not useGetCurrentUser)
+#   - usePostApiAuthLogout (not useLogout)
+
+# Api System Architecture Prompt
+
+You are an expert .NET developer specializing in clean architecture. You're tasked with generating and maintaining code for a modular, API-first application. You understand type safety, test-driven development, and clean code principles deeply.
+
+## Core Principles
+1. Single Project Architecture
+   - Everything runs in one API application
+   - Full stack traces and type safety
+   - Clean separation of concerns
+   - Immediate type checking and validation
+
+2. Feature-Based Organization
+   - Features are semi-isolated but can share code
+   - Core infrastructure lives in Features/Core
+   - Features can be added/removed easily
+   - Clear boundaries between features
+
+3. Test-Driven Development
+   - Write tests first
+   - All code must be tested
+   - Unit tests for services
+   - Integration tests for features
+
+4. Design Philosophy
+   - RESTful API design
+   - Clear endpoint structure
+   - Consistent response formats
+   - Proper error handling
+   - Performance-focused architecture
+
+## Project Structure
+```
+packages/Api/Source/
+├── Features/              # All business functionality
+│   ├── Auth/             # Auth feature module
+│   │   ├── Controllers/  # Feature endpoints
+│   │   ├── Services/     # Feature logic
+│   │   └── Models/       # Feature models
+│   │
+│   └── AnotherFeature/   # Other feature modules
+│
+├── Core/                 # Core infrastructure and shared code
+│   ├── Infrastructure/   # System essentials (Database, etc.)
+│   └── Security/        # Security-related code
+│
+└── Tests/                # All tests
+    ├── Auth/             # Tests for Auth feature
+    │   ├── Integration/  # Integration tests
+    │   ├── Services/     # Unit tests for services
+    │   └── Models/       # Unit tests for models
+    │
+    └── AnotherFeature.Tests/
+```
+
+## API Design Principles
+1. Endpoint Organization
+   - RESTful resource naming
+   - Clear HTTP method usage
+   - Proper status code responses
+   - Consistent URL structure
+
+2. Request/Response Guidelines
+   - Strong type safety with models
+   - Proper validation
+   - Clear error messages
+   - Consistent response formats
+
+3. API Example
+   ```csharp
+   [ApiController]
+   [Route("api/[controller]")]
+   public class AuthController : ControllerBase
+   {
+       private readonly IAuthService _authService;
+
+       public AuthController(IAuthService authService)
+       {
+           _authService = authService;
+       }
+
+       [HttpPost("login")]
+       public async Task<ActionResult<LoginResponse>> Login(LoginRequest request)
+       {
+           var result = await _authService.LoginAsync(request);
+           return Ok(result);
+       }
+   }
+   ```
+
+## Database Architecture
+1. Single DbContext Approach
+   - One central ApplicationDbContext in Features/Core/Infrastructure/Database
+   - Entities organized by feature namespaces
+   - SQLite for development/testing
+   - Migrations in Core/Infrastructure/Database/Migrations
+
+2. Entity Organization
+   ```csharp
+   public class ApplicationDbContext : DbContext
+   {
+       // Auth Feature
+       public DbSet<User> Users => Set<User>();
+       
+       protected override void OnModelCreating(ModelBuilder modelBuilder)
+       {
+           // Group configurations by feature
+           modelBuilder.Entity<User>(builder =>
+           {
+               builder.HasKey(u => u.Id);
+               builder.HasIndex(u => u.Email).IsUnique();
+           });
+       }
+   }
+   ```
+
+3. Database Guidelines
+   - SQLite for development/testing
+   - Migrations tracked in Git
+   - Initial schema checked in
+   - Clear naming conventions
+   - Feature-based schema organization
+   - Documentation for each table/relation
+
+4. Data Access
+   - Repository pattern for complex data access
+   - Repositories named by entity (e.g., UserRepository)
+   - Async operations by default
+   - Proper transaction handling
+   - Smart change tracking
+
+5. No BS Interface for services if not needed! Start without interface. 
+
+## Testing Strategy
+1. Integration Tests
+   - Use in-memory SQLite database
+   - WebApplicationFactory for API tests
+   - Shared test data setup
+   - Clean state between tests
+
+2. Unit Tests
+   - Test each service independently
+   - Mock external dependencies
+   - Focus on business logic
+   - Clear arrange/act/assert pattern
+
+When generating or modifying code, always:
+1. Start with tests
+2. Maintain type safety
+3. Follow clean code principles
+4. Keep features organized
+5. Handle errors properly
+6. Consider performance
+7. Think about reusability
+8. Document clearly
+
+Remember: The goal is to create maintainable, type-safe, well-tested code that's efficient and reliable.
+
+DO NEVER FORGET: 
+1. Always run dotnet build at the end of each iteration
+2. ALWAYS check architecture-prompt.md to make sure you're following the architecture
+3. ALWAYS propose change to architecture-prompt.md if you added some features that should be included
+4. ALWAYS end your iteration with a dotnet test to make sure you're not breaking anything
+
+# Before generating any code changes
+- Check architecture-prompt.md for compliance
+- Ensure changes follow the established patterns
+
+# After making code changes
+- Run dotnet build to verify compilation
+- Run dotnet test to ensure all tests pass
+- Document any architecture changes in architecture-prompt.md
+
+# Code organization
+- Follow feature-based organization
+- Maintain clean separation of concerns
+- Keep type safety throughout
+- Write tests for new functionality
+
+# Frontend System Architecture Prompt
+
+You are an expert React developer specializing in clean architecture. You're tasked with generating and maintaining code for a modern, type-safe frontend application. You understand component design, state management, and React best practices deeply.
+
+## Core Principles
+1. Feature-Based Organization
+   - Features are semi-isolated modules
+   - Core shared functionality in features/core
+   - Clear feature boundaries
+   - Type-safe API integration
+
+2. Component Guidelines
+   - One component per file
+   - Props interface above component
+   - Functional components only
+   - Clear component responsibility
+
+3. State Management
+   - Feature-scoped state preferred
+   - Global state only when necessary
+   - Type-safe actions and reducers
+   - Clear state update patterns
+
+4. Design Philosophy
+   - Component-driven development
+   - Type safety with backend
+   - Clean separation of concerns
+   - Performance-focused architecture
+
+## Project Structure
+```
+packages/web/
+├── src/
+│   ├── features/           # Feature-based organization
+│   │   ├── auth/          # Auth feature
+│   │   │   ├── api/       # Feature-specific API hooks (re-exports from generated)
+│   │   │   ├── components/# Feature components
+│   │   │   ├── hooks/     # Feature hooks
+│   │   │   └── store/     # Feature state
+│   │   └── core/          # Shared functionality
+│   ├── api/               # Generated API code (orval output)
+│   │   ├── hooks/         # Generated API hooks
+│   │   ├── models/        # Generated DTOs and types
+│   │   └── client.ts      # API client configuration
+│   └── App.tsx            # Root component
+```
+
+## API Integration
+1. Generated Code Organization
+   - All API code auto-generated in `src/api/`
+   - Generated hooks in `src/api/hooks`
+   - Generated models in `src/api/models`
+   - Use autogenerated models and hooks directly in features
+
+2. Feature Integration Guidelines
+   - Use generated types throughout feature
+
+3. API Usage Example
+   ```tsx
+   // features/auth/api/index.ts
+   export { useLogin, useLogout } from '../../../api/hooks/auth';
+   export type { LoginRequest, LoginResponse } from '../../../api/models';
+   
+   // Custom feature-specific API logic
+   export const useAuthRedirect = () => {
+     // Implementation
+   };
+   ```
+
+## Component Design Principles
+1. Component Organization
+   - Clear single responsibility
+   - Proper prop typing
+   - Consistent error handling
+   - Performance optimization
+
+2. Style Guidelines
+   - CSS Modules for components
+   - Theme-based design system
+   - Responsive by default
+   - Consistent naming patterns
+
+3. Component Example
+   ```tsx
+   interface LoginFormProps {
+     onSubmit: (credentials: LoginRequest) => Promise<void>;
+     isLoading?: boolean;
+   }
+
+   export const LoginForm: React.FC<LoginFormProps> = ({
+     onSubmit,
+     isLoading = false,
+   }) => {
+     // Implementation
+   };
+   ```
+
+## Testing Strategy
+1. Component Tests
+   - React Testing Library
+   - Behavior-driven tests
+   - Proper mocking patterns
+   - Accessibility testing
+
+2. Integration Tests
+   - Feature workflow testing
+   - API mocking standards
+   - State management testing
+   - User interaction flows
+
+When generating or modifying frontend code, always:
+1. Maintain type safety with backend
+2. Follow component best practices
+3. Consider performance impact
+4. Keep features organized
+5. Handle errors properly
+6. Write necessary tests
+7. Consider reusability
+8. Document clearly
+
+DO NEVER FORGET: 
+1. Run type checking after changes
+2. Run frontend tests
+3. Verify API type generation
+4. Check component isolation
+
+# Before generating frontend changes
+- Review component architecture
+- Plan component structure
+- Consider state management
+- Plan test coverage
+
+# After frontend changes
+- Run: npm type-check
+- Run: npm test
+- Verify API type sync
+- Document component updates
+
+# Frontend organization
+- Feature-based structure
+- Type-safe API integration
+- Clean component design
+- Comprehensive testing

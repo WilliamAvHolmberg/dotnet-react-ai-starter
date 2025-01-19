@@ -1,0 +1,12 @@
+{
+  "name": "softai",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "curl -X POST http://localhost:5001/api/users/seed"
+  },
+  "author": "",
+  "license": "ISC"
+}
