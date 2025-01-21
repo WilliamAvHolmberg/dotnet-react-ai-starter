@@ -43,6 +43,15 @@ cd ../web
 npm install
 ```
 
+4. Seed the database (when application is running):
+```bash
+curl -X POST http://localhost:5001/api/users/seed
+```
+
+5. Default login credentials:
+- Email: test@example.com
+- Password: Test123!
+
 ### Running the Application
 
 1. Start the backend:
