@@ -1,0 +1,186 @@
+---
+description: Everything related to the backend
+globs: packages/Api/*
+---
+# API Response Patterns
+# ====================
+# 1. Empty Results
+#    - Return empty/null response with 200 OK
+#    - Never use 404 for expected empty states
+#    - Use 404 only for invalid resource IDs
+#    - Include metadata about empty state when helpful
+#
+# 2. Error States
+#    - Use appropriate 4xx/5xx codes
+#    - Include clear error messages
+#    - Add recovery hints when possible
+#    - Log errors with proper context
+#
+# 3. Success Patterns
+#    - Use 200 for successful reads
+#    - Use 201 for resource creation
+#    - Use 204 for successful deletes
+#    - Include relevant metadata
+
+# API System Architecture
+# ======================
+
+## Core Principles
+1. Single Project Architecture
+   - Everything runs in one API application
+   - Full stack traces and type safety
+   - Clean separation of concerns
+   - Immediate type checking and validation
+
+2. Feature-Based Organization
+   - Features are semi-isolated but can share code
+   - Core infrastructure lives in Features/Core
+   - Features can be added/removed easily
+   - Clear boundaries between features
+
+3. Test-Driven Development
+   - Write tests first
+   - All code must be tested
+   - Unit tests for services
+   - Integration tests for features
+
+4. Design Philosophy
+   - RESTful API design
+   - Clear endpoint structure
+   - Consistent response formats
+   - Proper error handling
+   - Performance-focused architecture
+
+## Project Structure
+```
+packages/Api/Source/
+├── Features/              # All business functionality
+│   ├── Auth/             # Auth feature module
+│   │   ├── Controllers/  # Feature endpoints
+│   │   ├── Services/     # Feature logic
+│   │   └── Models/       # Feature models
+│   │
+│   └── AnotherFeature/   # Other feature modules
+│
+├── Core/                 # Core infrastructure and shared code
+│   ├── Infrastructure/   # System essentials (Database, etc.)
+│   └── Security/        # Security-related code
+│
+└── Tests/                # All tests
+    ├── Auth/             # Tests for Auth feature
+    │   ├── Integration/  # Integration tests
+    │   ├── Services/     # Unit tests for services
+    │   └── Models/       # Unit tests for models
+    │
+    └── AnotherFeature.Tests/
+```
+
+## API Design Principles
+1. Endpoint Organization
+   - RESTful resource naming
+   - Clear HTTP method usage
+   - Proper status code responses
+   - Consistent URL structure
+
+2. Request/Response Guidelines
+   - Strong type safety with models
+   - Proper validation
+   - Clear error messages
+   - Consistent response formats
+
+3. API Example
+   ```csharp
+   [ApiController]
+   [Route("api/[controller]")]
+   public class AuthController : ControllerBase
+   {
+       private readonly IAuthService _authService;
+
+       public AuthController(IAuthService authService)
+       {
+           _authService = authService;
+       }
+
+       [HttpPost("login")]
+       public async Task<ActionResult<LoginResponse>> Login(LoginRequest request)
+       {
+           var result = await _authService.LoginAsync(request);
+           return Ok(result);
+       }
+   }
+   ```
+
+## Database Architecture
+1. Single DbContext Approach
+   - One central ApplicationDbContext in Features/Core/Infrastructure/Database
+   - Entities organized by feature namespaces
+   - SQLite for development/testing
+   - Migrations in Core/Infrastructure/Database/Migrations
+
+2. Entity Organization
+   ```csharp
+   public class ApplicationDbContext : DbContext
+   {
+       // Auth Feature
+       public DbSet<User> Users => Set<User>();
+       
+       protected override void OnModelCreating(ModelBuilder modelBuilder)
+       {
+           // Group configurations by feature
+           modelBuilder.Entity<User>(builder =>
+           {
+               builder.HasKey(u => u.Id);
+               builder.HasIndex(u => u.Email).IsUnique();
+           });
+       }
+   }
+   ```
+
+3. Database Guidelines
+   - SQLite for development/testing
+   - Migrations tracked in Git
+   - Initial schema checked in
+   - Clear naming conventions
+   - Feature-based schema organization
+   - Documentation for each table/relation
+
+4. Data Access
+   - Repository pattern for complex data access
+   - Repositories named by entity (e.g., UserRepository)
+   - Async operations by default
+   - Proper transaction handling
+   - Smart change tracking
+
+5. No BS Interface for services if not needed! Start without interface. 
+
+## Testing Strategy
+1. Integration Tests
+   - Use in-memory SQLite database
+   - WebApplicationFactory for API tests
+   - Shared test data setup
+   - Clean state between tests
+
+2. Unit Tests
+   - Test each service independently
+   - Mock external dependencies
+   - Focus on business logic
+   - Clear arrange/act/assert pattern
+
+# Development Workflow
+1. Before Changes
+   - Check architecture compliance
+   - Ensure changes follow patterns
+   - Plan test coverage
+   - Consider performance impact
+
+2. After Changes
+   - Run dotnet build
+   - Run dotnet test
+   - Document architecture updates
+   - Review error handling
+
+3. Code Organization
+   - Feature-based structure
+   - Clean separation of concerns
+   - Type safety throughout
+   - Comprehensive testing

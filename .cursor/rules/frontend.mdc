@@ -1,0 +1,263 @@
+---
+description: Everything related to the frontend
+globs: packages/web
+---
+ Start every message with FRONTEND YOO
+ # Visual Feedback Guidelines
+# =========================
+# Every user interaction MUST include:
+# 1. Progress Indicators
+#    - Loading states for async operations
+#    - Disabled states during processing
+#    - Animated transitions for state changes
+#
+# 2. Success Feedback
+#    - Visual confirmation (checkmark, green indicators)
+#    - Success messages via toast/notification
+#    - Smooth transitions to next state
+#
+# 3. Error Feedback
+#    - Clear error messages via toast/notification
+#    - Visual error states (red outlines, warning icons)
+#    - Recovery instructions when applicable
+#
+# 4. Interaction Feedback
+#    - Hover states for interactive elements
+#    - Active/pressed states for buttons
+#    - Focus states for form elements
+
+# Authentication & Authorization Guidelines
+# ======================================
+# 1. Auth State Management
+#    - Centralized auth context in features/auth/context
+#    - No global redirects on 401s
+#    - Graceful unauthorized state handling
+#    - Clear loading states during auth checks
+#
+# 2. Protected Routes
+#    - Use AuthGuard component for protection
+#    - Show helpful unauthorized messages
+#    - Preserve attempted URLs for post-login redirect
+#    - Handle nested route protection
+#
+# 3. Auth UI/UX
+#    - Clear authentication status in header
+#    - Smooth login/logout transitions
+#    - Helpful error messages
+#    - Proper loading states
+
+# Route Structure Guidelines
+# ========================
+# 1. Route Configuration
+#    - Centralized in src/routes.tsx
+#    - Type-safe route definitions
+#    - Feature-based organization
+#    - Clear auth requirements
+#
+# 2. Route Interface
+#   ```typescript
+#   interface RouteConfig {
+#     path: string;
+#     element: React.ReactNode;
+#     isHeaderItem?: boolean;
+#     requiresAuth?: boolean;
+#     icon?: React.ReactNode;
+#     label?: string;
+#     children?: RouteConfig[];
+#   }
+#   ```
+#
+# 3. Route Organization
+#    - Group by feature
+#    - Clear hierarchy
+#    - Consistent metadata
+#    - Proper nesting
+#
+# 4. Navigation
+#    - Header items from route config
+#    - Consistent active states
+#    - Clear navigation patterns
+#    - Type-safe links
+
+# Frontend Utilities Organization
+# =============================
+# All shared utilities are in src/shared/utils:
+# - Location: src/shared/utils/utils.ts
+# - Common utilities:
+#   - cn: Class merging with tailwind-merge
+#   - Date formatting
+#   - Type helpers
+#   - Common calculations
+# Example:
+#   import { cn } from "@/shared/utils/utils"
+#   className={cn("base-class", condition && "conditional-class")}
+
+# API Model Naming Conventions
+# ===========================
+# All generated models follow strict naming:
+# - Request DTOs: [Name]RequestDTO
+# - Response DTOs: [Name]ResponseDTO
+# Example:
+#   - LoginRequestDTO (not LoginRequest)
+#   - LoginResponseDTO (not LoginResponse)
+#   - UserProfileResponseDTO (not User or UserProfile)
+
+# API Hooks Organization
+# =====================
+# All API hooks are generated in a single file:
+# - Location: src/api/hooks/api.ts
+# - Naming: use[Operation][Path]
+# Example:
+#   - usePostApiAuthLogin (not useLogin)
+#   - useGetApiAuthMe (not useGetCurrentUser)
+#   - usePostApiAuthLogout (not useLogout)
+#
+# Query Invalidation Patterns
+# --------------------------
+# 1. Query Key Management
+#    - Always use generated getQueryKey functions from api.ts
+#    - Never hardcode query keys as strings
+#    - Example: getGetApiAuthMeQueryKey()
+#
+# 2. Mutation Side Effects
+#    - Always consider which queries need refetching after mutation
+#    - Use queryClient.invalidateQueries with proper query keys
+#    - Example:
+#      ```typescript
+#      const queryClient = useQueryClient();
+#      queryClient.invalidateQueries({ 
+#        queryKey: getGetApiAuthMeQueryKey()
+#      });
+#      ```
+#
+# 3. Common Invalidation Scenarios
+#    - After create: Invalidate list queries
+#    - After update: Invalidate both detail and list queries
+#    - After delete: Invalidate list queries
+#    - After auth changes: Invalidate user-specific queries
+
+# Frontend System Architecture
+
+## Core Principles
+1. Feature-Based Organization
+   - Features are semi-isolated modules
+   - Core shared functionality in features/core
+   - Clear feature boundaries
+   - Type-safe API integration
+
+2. Component Guidelines
+   - One component per file
+   - Props interface above component
+   - Functional components only
+   - Clear component responsibility
+
+3. State Management
+   - Feature-scoped state preferred
+   - Global state only when necessary
+   - Type-safe actions and reducers
+   - Clear state update patterns
+
+4. Design Philosophy
+   - Component-driven development
+   - Type safety with backend
+   - Clean separation of concerns
+   - Performance-focused architecture
+
+## Project Structure
+```
+packages/web/
+├── src/
+│   ├── features/           # Feature-based organization
+│   │   ├── auth/          # Auth feature
+│   │   │   ├── components/# Feature components
+│   │   │   ├── hooks/     # Feature hooks
+│   │   │   └── store/     # Feature state
+│   │   └── core/          # Shared functionality
+│   ├── api/               # Generated API code (orval output)
+│   │   ├── hooks/         # Generated API hooks
+│   │   ├── models/        # Generated DTOs and types
+│   │   └── client.ts      # API client configuration
+│   └── App.tsx            # Root component
+```
+
+## API Integration
+1. Generated Code Organization
+   - All API code auto-generated in `src/api/`
+   - Generated hooks in `src/api/hooks`
+   - Generated models in `src/api/models`
+   - Use autogenerated models and hooks directly in features
+
+2. Feature Integration Guidelines
+   - Use generated types throughout feature
+
+3. API Usage Example
+   ```tsx
+   // features/auth/api/index.ts
+   export { useLogin, useLogout } from '../../../api/hooks/auth';
+   export type { LoginRequest, LoginResponse } from '../../../api/models';
+   
+   // Custom feature-specific API logic
+   export const useAuthRedirect = () => {
+     // Implementation
+   };
+   ```
+
+## Component Design Principles
+1. Component Organization
+   - Clear single responsibility
+   - Proper prop typing
+   - Consistent error handling
+   - Performance optimization
+
+2. Style Guidelines
+   - CSS Modules for components
+   - Theme-based design system
+   - Responsive by default
+   - Consistent naming patterns
+
+3. Component Example
+   ```tsx
+   interface LoginFormProps {
+     onSubmit: (credentials: LoginRequest) => Promise<void>;
+     isLoading?: boolean;
+   }
+
+   export const LoginForm: React.FC<LoginFormProps> = ({
+     onSubmit,
+     isLoading = false,
+   }) => {
+     // Implementation
+   };
+   ```
+
+## Testing Strategy
+1. Component Tests
+   - React Testing Library
+   - Behavior-driven tests
+   - Proper mocking patterns
+   - Accessibility testing
+
+2. Integration Tests
+   - Feature workflow testing
+   - API mocking standards
+   - State management testing
+   - User interaction flows
+
+# Development Workflow
+1. Before Changes
+   - Review component architecture
+   - Plan component structure
+   - Consider state management
+   - Plan test coverage
+
+2. After Changes
+   - Run: npm type-check
+   - Run: npm test
+   - Verify API type sync
+   - Document component updates
+
+3. Code Organization
+   - Feature-based structure
+   - Type-safe API integration
+   - Clean component design
+   - Comprehensive testing

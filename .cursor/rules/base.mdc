@@ -1,0 +1,58 @@
+---
+description: System instructions for this project
+globs: *
+---
+# Project Structure & Architecture
+# ==============================
+
+## Core Organization
+```
+packages/
+├── api/                 # Backend API (.NET Core)
+│   └── Source/         # API source code
+│       ├── Features/   # Feature-based modules
+│       └── Core/       # Shared infrastructure
+│
+├── web/                # Frontend (React)
+    └── src/           
+        ├── features/   # Feature-based modules
+        └── api/        # Auto-generated API code
+```
+
+## Auto-Generation Flow
+- packages/api generates OpenAPI/Swagger schema
+- packages/web uses Orval to generate:
+  - Type-safe API hooks
+  - Request/Response interfaces
+  - API client configuration
+
+## Core Principles
+1. Feature-Based Organization
+   - Semi-isolated feature modules
+   - Shared core functionality
+   - Clear feature boundaries
+   - Type-safe integration
+
+2. Type Safety
+   - Full-stack type safety through generated code
+   - Consistent model naming
+   - Auto-generated API contracts
+
+3. Development Workflow
+   - Backend changes trigger Swagger updates
+   - Frontend auto-generates from Swagger
+   - Immediate type checking across stack
+
+4. API Model Naming Conventions
+   - Request DTOs: [Name]RequestDTO
+   - Response DTOs: [Name]ResponseDTO
+   - Consistent across full stack
+
+5. Testing Requirements
+   - All code must be tested
+   - Unit tests for services
+   - Integration tests for features
+   - Component tests for UI
+
+## Development
+Always ALWAYS start with backend first if doing a fullstack feature. ALWAYS execute dotnet run when backend is done so frontend can generate types. ALWAYS wait until you are sure frontend hooks/interfaces are generated

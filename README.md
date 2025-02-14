@@ -1,6 +1,6 @@
 # SoftAI
 
-A modern, full-stack application built with .NET 8 and React, with a clean, modular architecture.
+A full-stack application built with .NET 8 and React, with a clean, modular architecture.
 
 ## 🌟 Features
 
