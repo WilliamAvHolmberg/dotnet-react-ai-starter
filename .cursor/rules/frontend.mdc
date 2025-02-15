@@ -114,11 +114,23 @@ globs: packages/web
 #   - usePostApiAuthLogout (not useLogout)
 #
 # Query Invalidation Patterns
-# --------------------------
+# -----
 # 1. Query Key Management
-#    - Always use generated getQueryKey functions from api.ts
-#    - Never hardcode query keys as strings
-#    - Example: getGetApiAuthMeQueryKey()
+#    ⚠️ IMPORTANT: ALWAYS use predefined cache keys! ⚠️
+#    - NEVER create your own query keys
+#    - ALWAYS use the get[Operation][Path]QueryKey functions from api.ts
+#    - These functions handle all params and ensure type-safety
+#    - Example: 
+#      ```typescript
+#      // ❌ BAD - Don't do this:
+#      queryClient.invalidateQueries({ queryKey: ['api', 'sms'] })
+#      
+#      // ✅ GOOD - Always do this:
+#      queryClient.invalidateQueries({ 
+#        queryKey: getGetApiSmsQueryKey() 
+#      })
+#      ```
+#
 #
 # 2. Mutation Side Effects
 #    - Always consider which queries need refetching after mutation

@@ -153,6 +153,37 @@ packages/Api/Source/
 
 5. No BS Interface for services if not needed! Start without interface. 
 
+## Testing Strategy
+1. Integration Tests
+   - Use in-memory SQLite database
+   - WebApplicationFactory for API tests
+   - Shared test data setup
+   - Clean state between tests
+
+2. Unit Tests
+   - Test each service independently
+   - Mock external dependencies
+   - Focus on business logic
+   - Clear arrange/act/assert pattern
+
+# Development Workflow
+1. Before Changes
+   - Check architecture compliance
+   - Ensure changes follow patterns
+   - Plan test coverage
+   - Consider performance impact
+
+2. After Changes
+   - Run dotnet build
+   - Run dotnet test
+   - Document architecture updates
+   - Review error handling
+
+3. Code Organization
+   - Feature-based structure
+   - Clean separation of concerns
+   - Type safety throughout
+   - Comprehensive testing
 
 # Entity Framework & Database Architecture
 # =====================================
@@ -189,9 +220,11 @@ packages/Api/Source/
 
 4. Migration Workflow
    ```bash
-   # Only need to create new migrations
-   # Database updates happen automatically on startup (Program.cs)
+   # Create new migration
    dotnet ef migrations add MigrationName
+
+   # Update database
+   dotnet ef database update
    ```
 
 5. Entity Guidelines
@@ -274,34 +307,68 @@ packages/Api/Source/
        public string CreatedById { get; set; }
        public User CreatedBy { get; set; }
    }
-## Testing Strategy
-1. Integration Tests
-   - Use in-memory SQLite database
-   - WebApplicationFactory for API tests
-   - Shared test data setup
-   - Clean state between tests
+   ```
 
-2. Unit Tests
-   - Test each service independently
-   - Mock external dependencies
-   - Focus on business logic
-   - Clear arrange/act/assert pattern
+## Entity Framework Conventions
+1. Trust the Conventions
+   - Let EF handle standard configurations
+   - Only configure what EF can't infer
+   - Don't override working defaults
+   
+2. What NOT to Configure (trust EF):
+   ```csharp
+   // DON'T configure these - EF handles automatically:
+   - Primary keys named 'Id' or '{EntityName}Id'
+   - Required fields for non-nullable properties
+   - Foreign key relationships with standard naming
+   - Navigation properties with conventional names
+   - Cascade delete behavior
+   ```
 
-# Development Workflow
-1. Before Changes
-   - Check architecture compliance
-   - Ensure changes follow patterns
-   - Plan test coverage
-   - Consider performance impact
+3. What to Configure:
+   ```csharp
+   // DO configure these - EF needs help here:
+   builder.Entity<Message>(b =>
+   {
+       // Performance indexes
+       b.HasIndex(m => m.UserId);
+       b.HasIndex(m => m.CreatedAt);
+       
+       // Custom column types
+       b.Property(m => m.Price).HasColumnType("decimal(18,2)");
+       
+       // Unconventional names
+       b.HasOne(m => m.Owner)  // If not following Id convention
+         .WithMany()
+         .HasForeignKey("OwnerId");
+       
+       // Custom delete behavior (if not cascade)
+       b.HasOne(m => m.Category)
+         .WithMany()
+         .OnDelete(DeleteBehavior.Restrict);
+   });
+   ```
 
-2. After Changes
-   - Run dotnet build
-   - Run dotnet test
-   - Document architecture updates
-   - Review error handling
+4. Configuration Examples:
+   ```csharp
+   // BAD - redundant configuration
+   builder.Entity<User>(b =>
+   {
+       b.HasKey(u => u.Id);                // Unnecessary - Id is standard
+       b.Property(u => u.Name).IsRequired();// Unnecessary - non-nullable
+       b.HasOne(u => u.Profile)            // Unnecessary - follows convention
+        .WithOne()
+        .HasForeignKey<UserProfile>("UserId");
+   });
 
-3. Code Organization
-   - Feature-based structure
-   - Clean separation of concerns
-   - Type safety throughout
-   - Comprehensive testing
+   // GOOD - only what's needed
+   builder.Entity<User>(b =>
+   {
+       b.HasIndex(u => u.Email);           // Needed for lookups
+       b.Property(u => u.Settings)         // Custom JSON conversion
+        .HasConversion(
+           v => JsonSerializer.Serialize(v),
+           v => JsonSerializer.Deserialize<UserSettings>(v)
+        );
+   });
+   ```
