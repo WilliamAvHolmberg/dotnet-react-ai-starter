@@ -153,6 +153,127 @@ packages/Api/Source/
 
 5. No BS Interface for services if not needed! Start without interface. 
 
+
+# Entity Framework & Database Architecture
+# =====================================
+
+## Core Database Setup
+1. Entity Framework Core
+   - Using EF Core with SQLite
+   - IdentityDbContext for user management
+   - Migrations run automatically in development
+   - Database created in production if not exists
+
+2. ApplicationDbContext
+   ```csharp
+   public class ApplicationDbContext : IdentityDbContext<User>
+   {
+       public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+           : base(options) { }
+
+       // Entity configurations go in OnModelCreating
+       protected override void OnModelCreating(ModelBuilder builder)
+       {
+           base.OnModelCreating(builder);
+           // Feature-specific configurations here
+       }
+   }
+   ```
+
+3. Entity Organization
+   - Entities live in Features/{Feature}/Models
+   - Each entity gets its own configuration in OnModelCreating
+   - Use private setters for auto-managed properties
+   - UTC dates for all timestamps
+   - Required properties marked with IsRequired()
+
+4. Migration Workflow
+   ```bash
+   # Only need to create new migrations
+   # Database updates happen automatically on startup (Program.cs)
+   dotnet ef migrations add MigrationName
+   ```
+
+5. Entity Guidelines
+   ```csharp
+   public class ExampleEntity
+   {
+       public Guid Id { get; set; }                    // Use GUID for IDs
+       public string Name { get; set; } = string.Empty;// Initialize strings
+       public DateTime CreatedAt { get; private set; } // Private setter for auto-managed
+       public string UserId { get; set; }              // Foreign keys match Identity
+       public User User { get; set; }                  // Navigation properties
+   }
+   ```
+
+6. Database Initialization
+   ```csharp
+   // In Program.cs
+   if (app.Environment.IsDevelopment())
+   {
+       // Run migrations in development
+       db.Database.Migrate();
+   }
+   else
+   {
+       // Just ensure created in production
+       db.Database.EnsureCreated();
+   }
+   ```
+
+7. Relationship Patterns
+   - Use navigation properties for relationships
+   - Configure cascading deletes explicitly
+   - Index foreign keys
+   - Use shadow properties when needed
+   Example:
+   ```csharp
+   builder.Entity<Message>(b =>
+   {
+       b.HasOne(m => m.User)
+        .WithMany()
+        .HasForeignKey(m => m.UserId)
+        .IsRequired()
+        .OnDelete(DeleteBehavior.Cascade);
+
+       b.HasIndex(m => m.UserId);
+   });
+   ```
+
+8. Query Guidelines
+   - Use async methods (e.g., ToListAsync())
+   - Include related data explicitly
+   - Project to DTOs when possible
+   - Use tracking only when needed
+   Example:
+   ```csharp
+   await _context.Messages
+       .AsNoTracking()
+       .Include(m => m.User)
+       .Where(m => m.UserId == userId)
+       .Select(m => new MessageDTO
+       {
+           Id = m.Id,
+           Text = m.Text
+       })
+       .ToListAsync();
+   ```
+
+9. Common Patterns
+   - Soft delete using IsDeleted flag
+   - CreatedAt/UpdatedAt timestamps
+   - User ownership tracking
+   - Status enums for state
+   Example:
+   ```csharp
+   public class BaseEntity
+   {
+       public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
+       public DateTime? UpdatedAt { get; private set; }
+       public bool IsDeleted { get; set; }
+       public string CreatedById { get; set; }
+       public User CreatedBy { get; set; }
+   }
 ## Testing Strategy
 1. Integration Tests
    - Use in-memory SQLite database

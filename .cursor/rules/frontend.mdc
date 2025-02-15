@@ -2,7 +2,6 @@
 description: Everything related to the frontend
 globs: packages/web
 ---
- Start every message with FRONTEND YOO
  # Visual Feedback Guidelines
 # =========================
 # Every user interaction MUST include:
@@ -25,6 +24,8 @@ globs: packages/web
 #    - Hover states for interactive elements
 #    - Active/pressed states for buttons
 #    - Focus states for form elements
+# 5. Premium design
+#    - We are creating the best frontend in the world. The most beautiful, the most    intuitive, and the best UX. Remember this
 
 # Authentication & Authorization Guidelines
 # ======================================
@@ -156,12 +157,18 @@ globs: packages/web
    - Global state only when necessary
    - Type-safe actions and reducers
    - Clear state update patterns
+   - Use zod library for form validation!!!
 
 4. Design Philosophy
    - Component-driven development
    - Type safety with backend
    - Clean separation of concerns
    - Performance-focused architecture
+
+5. Styling and component library
+   - tailwind for as much as possible!
+   - ShadCN, components and its hooks are in ./packages/web/src/shared/components/ui
+
 
 ## Project Structure
 ```
