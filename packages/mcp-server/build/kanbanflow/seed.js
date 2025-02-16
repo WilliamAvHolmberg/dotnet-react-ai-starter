@@ -1,7 +1,6 @@
 import { KanbanService } from './kanban-service.js';
-import { KANBAN_CONFIG } from './config.js';
 export async function seedKanbanBoard() {
-    const kanbanService = new KanbanService(KANBAN_CONFIG.API_TOKEN);
+    const kanbanService = new KanbanService();
     // Create SMS implementation task
     await kanbanService.createTask({
         columnId: 'Q3OKqBpAPHtE',

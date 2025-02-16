@@ -2,9 +2,9 @@ import { KanbanClient } from './kanban-client.js';
 import { KANBAN_CONFIG } from './config.js';
 export class KanbanService {
     client;
-    constructor(apiToken) {
+    constructor() {
         console.log('[KanbanService] Initializing KanbanService');
-        this.client = new KanbanClient(apiToken);
+        this.client = new KanbanClient();
     }
     async getBoard() {
         console.log('[KanbanService] Getting board information');

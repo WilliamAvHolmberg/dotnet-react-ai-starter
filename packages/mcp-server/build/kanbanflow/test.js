@@ -2,7 +2,7 @@ import { KanbanService } from './kanban-service.js';
 async function test() {
     console.log('Starting Kanban Flow test...');
     // Initialize service with the token
-    const service = new KanbanService('JzxLfbAiN8xhqNeguio8BcPBk1');
+    const service = new KanbanService();
     try {
         console.log('Attempting to get board...');
         const board = await service.getBoard();
