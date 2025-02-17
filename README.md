@@ -1,6 +1,6 @@
 # SoftAI
 
-A full-stack application built with .NET 8 and React, with a clean, modular architecture.
+A full-stack application built with .NET 9 and React, with a clean, modular architecture.
 
 ## 🌟 Features
 
@@ -10,7 +10,7 @@ A full-stack application built with .NET 8 and React, with a clean, modular arch
   - Role-based access control
 
 - **Modern Tech Stack**
-  - .NET 8 backend with clean architecture
+  - .NET 9 backend with clean architecture
   - React frontend with TypeScript
   - Feature-based organization
   - Type-safe API integration
@@ -19,7 +19,7 @@ A full-stack application built with .NET 8 and React, with a clean, modular arch
 
 ### Prerequisites
 
-- .NET 8 SDK
+- .NET 9 SDK
 - Node.js (v18+)
 - npm or yarn
 - SQLite (for development)
