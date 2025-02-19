@@ -2,6 +2,10 @@
 
 A full-stack application built with .NET 9 and React, with a clean, modular architecture.
 
+## Workshop? 
+1. Check out the [setup-guide.md](setup-guide.md) file how to setup the project.
+2. Check out the [implementation-guide.md](implementation-guide.md) file how to get started with the implementation.
+
 ## 🌟 Features
 
 - **Authentication & Authorization**
