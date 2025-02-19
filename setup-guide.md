@@ -22,7 +22,7 @@ dotnet restore
 If you encounter an error with not having installed the `dotnet sdk` you can (on Mac OS) run 
 ```bash
 brew tap isen-ng/dotnet-sdk-versions
-brew install --cask dotnet-sdk8
+brew install --cask dotnet-sdk9
 ```
 
 ### 2. Configure Cursor IDE
