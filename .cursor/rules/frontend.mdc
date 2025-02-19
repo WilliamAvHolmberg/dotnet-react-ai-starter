@@ -1,6 +1,6 @@
 ---
 description: Everything related to the frontend
-globs: packages/web
+globs: packages/web/*
 ---
  # Visual Feedback Guidelines
 # =========================
