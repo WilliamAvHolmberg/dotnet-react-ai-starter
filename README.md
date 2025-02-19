@@ -3,8 +3,9 @@
 A full-stack application built with .NET 9 and React, with a clean, modular architecture.
 
 ## Workshop? 
-1. Check out the [setup-guide.md](setup-guide.md) file how to setup the project.
-2. Check out the [implementation-guide.md](implementation-guide.md) file how to get started with the implementation.
+1. Check out the [workshop.md](./.workshop/workshop.md) file how to setup the project.
+2. Check out the [setup-guide.md](./.workshop/setup-guide.md) file how to setup the project.
+3. Check out the [implementation-guide.md](./.workshop/implementation-guide.md) file how to get started with the implementation.
 
 ## 🌟 Features
 

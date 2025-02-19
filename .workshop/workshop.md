@@ -9,7 +9,7 @@ This hands-on session emphasizes collaborative learning:
 
 ## Getting Started
 
-Below is an outline of the steps. For detailed information on each configuration item, please see [`setup-guide.md`](https://github.com/WilliamAvHolmberg/bilberry-workshop/blob/main/setup-guide.md)
+Below is an outline of the steps. For detailed information on each configuration item, please see [`setup-guide.md`](setup-guide.md)
 
 ### Project Setup
 1. Clone the repository
@@ -27,7 +27,7 @@ Follow the setup steps in order:
 ## Core Challenge: SMS Platform
 Transform this notes application into an SMS platform using AI-driven development.
 
-For a step-by-step guide on implementing the features, common patterns, and best practices, check out [`implementation-guide.md`](https://github.com/WilliamAvHolmberg/bilberry-workshop/blob/main/implementation-guide.md).
+For a step-by-step guide on implementing the features, common patterns, and best practices, check out [`implementation-guide.md`](implementation-guide.md).
 
 ## Need Help?
 - Join our workshop Discord channel
