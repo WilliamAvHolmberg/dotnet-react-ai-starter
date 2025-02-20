@@ -64,7 +64,6 @@ globs: packages/web/*
 #     requiresAuth?: boolean;
 #     icon?: React.ReactNode;
 #     label?: string;
-#     children?: RouteConfig[];
 #   }
 #   ```
 #

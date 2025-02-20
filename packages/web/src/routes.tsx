@@ -1,5 +1,4 @@
 import { Bot, Users } from 'lucide-react';
-import { LoginPage } from './features/auth/pages/login';
 import { CreateUserPage } from './features/users/pages/create-user-page';
 import { UsersPage } from './features/users/pages/users-page';
 import { Card, CardDescription, CardHeader, CardTitle } from './shared/components/ui/card';
@@ -11,7 +10,6 @@ export interface RouteConfig {
   requiresAuth?: boolean;
   icon?: React.ReactNode;
   label?: string;
-  children?: RouteConfig[];
 }
 
 function WelcomePage() {
@@ -43,17 +41,12 @@ export const routes: RouteConfig[] = [
     isHeaderItem: true,
     requiresAuth: true,
     icon: <Users className="h-4 w-4" />,
-    label: 'Users',
-    children: [
-      {
-        path: '/users/create',
-        element: <CreateUserPage />,
-        requiresAuth: true
-      }
-    ]
+    label: 'Users'
   },
   {
-    path: '/login',
-    element: <LoginPage />
-  }
+    path: '/users/create',
+    element: <CreateUserPage />,
+    isHeaderItem: false,
+    requiresAuth: true
+  },
 ]; 

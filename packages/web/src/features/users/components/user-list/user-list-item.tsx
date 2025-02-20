@@ -1,9 +1,8 @@
 import { UserResponseDTO } from '../../api';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
-import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
-import { Edit2, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 
 interface UserListItemProps {
     user: UserResponseDTO;
@@ -43,7 +42,7 @@ export function UserListItem({ user, onDelete }: UserListItemProps) {
             </td>
             <td className="p-4 align-middle text-right">
                 <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button
+                    {/* <Button
                         variant="ghost"
                         size="sm"
                         className="h-8 w-8 p-0"
@@ -53,7 +52,7 @@ export function UserListItem({ user, onDelete }: UserListItemProps) {
                             <Edit2 className="h-4 w-4" />
                             <span className="sr-only">Edit</span>
                         </Link>
-                    </Button>
+                    </Button> */}
                     <Button
                         variant="ghost"
                         size="sm"
