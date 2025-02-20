@@ -1,5 +1,6 @@
-import { Bot, Users } from 'lucide-react';
+import { Bot, MessageSquare, Users } from 'lucide-react';
 import { LoginPage } from './features/auth/pages/login';
+import { SmsPage } from './features/sms/components/SmsPage';
 import { CreateUserPage } from './features/users/pages/create-user-page';
 import { UsersPage } from './features/users/pages/users-page';
 import { Card, CardDescription, CardHeader, CardTitle } from './shared/components/ui/card';
@@ -36,6 +37,13 @@ export const routes: RouteConfig[] = [
     isHeaderItem: true,
     icon: <Bot className="h-4 w-4" />,
     label: 'Home'
+  },
+  {
+    path: '/sms',
+    element: <SmsPage />,
+    isHeaderItem: true,
+    icon: <MessageSquare className="h-4 w-4" />,
+    label: 'SMS'
   },
   {
     path: '/users',

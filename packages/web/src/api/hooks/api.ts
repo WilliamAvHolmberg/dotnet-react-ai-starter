@@ -31,6 +31,11 @@ import type {
   GetApiUsersParams,
   LoginRequestDTO,
   LoginResponseDTO,
+  SendSmsRequestDtoDTO,
+  SendSmsResponseDtoDTO,
+  SmsImproveRequestDTODTO,
+  SmsImproveResponseDTODTO,
+  SmsMessageResponseDtoDTO,
   UpdateUserRequestDTO,
   UserListResponseDTO,
   UserProfileResponseDTO,
@@ -290,6 +295,257 @@ export function useGetApiAuthMe<TData = Awaited<ReturnType<typeof getApiAuthMe>>
 
 
 
+export const postApiSmsSend = (
+    sendSmsRequestDtoDTO: SendSmsRequestDtoDTO,
+ signal?: AbortSignal
+) => {
+      
+      
+      return customClient<SendSmsResponseDtoDTO>(
+      {url: `/api/Sms/send`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: sendSmsRequestDtoDTO, signal
+    },
+      );
+    }
+  
+
+
+export const getPostApiSmsSendMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiSmsSend>>, TError,{data: SendSmsRequestDtoDTO}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postApiSmsSend>>, TError,{data: SendSmsRequestDtoDTO}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiSmsSend>>, {data: SendSmsRequestDtoDTO}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiSmsSend(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiSmsSendMutationResult = NonNullable<Awaited<ReturnType<typeof postApiSmsSend>>>
+    export type PostApiSmsSendMutationBody = SendSmsRequestDtoDTO
+    export type PostApiSmsSendMutationError = ErrorType<unknown>
+
+    export const usePostApiSmsSend = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiSmsSend>>, TError,{data: SendSmsRequestDtoDTO}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof postApiSmsSend>>,
+        TError,
+        {data: SendSmsRequestDtoDTO},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiSmsSendMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
+export const getApiSmsHistory = (
+    
+ signal?: AbortSignal
+) => {
+      
+      
+      return customClient<SmsMessageResponseDtoDTO[]>(
+      {url: `/api/Sms/history`, method: 'GET', signal
+    },
+      );
+    }
+  
+
+export const getGetApiSmsHistoryQueryKey = () => {
+    return [`/api/Sms/history`] as const;
+    }
+
+    
+export const getGetApiSmsHistoryInfiniteQueryOptions = <TData = InfiniteData<Awaited<ReturnType<typeof getApiSmsHistory>>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getApiSmsHistory>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetApiSmsHistoryQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiSmsHistory>>> = ({ signal }) => getApiSmsHistory(signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn,   staleTime: 10000,  ...queryOptions} as UseInfiniteQueryOptions<Awaited<ReturnType<typeof getApiSmsHistory>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetApiSmsHistoryInfiniteQueryResult = NonNullable<Awaited<ReturnType<typeof getApiSmsHistory>>>
+export type GetApiSmsHistoryInfiniteQueryError = ErrorType<unknown>
+
+
+export function useGetApiSmsHistoryInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getApiSmsHistory>>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getApiSmsHistory>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiSmsHistory>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, }
+
+  ):  DefinedUseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetApiSmsHistoryInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getApiSmsHistory>>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getApiSmsHistory>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiSmsHistory>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, }
+
+  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetApiSmsHistoryInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getApiSmsHistory>>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getApiSmsHistory>>, TError, TData>>, }
+
+  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetApiSmsHistoryInfinite<TData = InfiniteData<Awaited<ReturnType<typeof getApiSmsHistory>>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseInfiniteQueryOptions<Awaited<ReturnType<typeof getApiSmsHistory>>, TError, TData>>, }
+
+  ):  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetApiSmsHistoryInfiniteQueryOptions(options)
+
+  const query = useInfiniteQuery(queryOptions) as  UseInfiniteQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getGetApiSmsHistoryQueryOptions = <TData = Awaited<ReturnType<typeof getApiSmsHistory>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSmsHistory>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetApiSmsHistoryQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiSmsHistory>>> = ({ signal }) => getApiSmsHistory(signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn,   staleTime: 10000,  ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getApiSmsHistory>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetApiSmsHistoryQueryResult = NonNullable<Awaited<ReturnType<typeof getApiSmsHistory>>>
+export type GetApiSmsHistoryQueryError = ErrorType<unknown>
+
+
+export function useGetApiSmsHistory<TData = Awaited<ReturnType<typeof getApiSmsHistory>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSmsHistory>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiSmsHistory>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, }
+
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetApiSmsHistory<TData = Awaited<ReturnType<typeof getApiSmsHistory>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSmsHistory>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiSmsHistory>>,
+          TError,
+          TData
+        > , 'initialData'
+      >, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetApiSmsHistory<TData = Awaited<ReturnType<typeof getApiSmsHistory>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSmsHistory>>, TError, TData>>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+
+export function useGetApiSmsHistory<TData = Awaited<ReturnType<typeof getApiSmsHistory>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiSmsHistory>>, TError, TData>>, }
+
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetApiSmsHistoryQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const postApiSmsImprove = (
+    smsImproveRequestDTODTO: SmsImproveRequestDTODTO,
+ signal?: AbortSignal
+) => {
+      
+      
+      return customClient<SmsImproveResponseDTODTO>(
+      {url: `/api/Sms/improve`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: smsImproveRequestDTODTO, signal
+    },
+      );
+    }
+  
+
+
+export const getPostApiSmsImproveMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiSmsImprove>>, TError,{data: SmsImproveRequestDTODTO}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof postApiSmsImprove>>, TError,{data: SmsImproveRequestDTODTO}, TContext> => {
+const {mutation: mutationOptions} = options ?? {};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postApiSmsImprove>>, {data: SmsImproveRequestDTODTO}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postApiSmsImprove(data,)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostApiSmsImproveMutationResult = NonNullable<Awaited<ReturnType<typeof postApiSmsImprove>>>
+    export type PostApiSmsImproveMutationBody = SmsImproveRequestDTODTO
+    export type PostApiSmsImproveMutationError = ErrorType<unknown>
+
+    export const usePostApiSmsImprove = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postApiSmsImprove>>, TError,{data: SmsImproveRequestDTODTO}, TContext>, }
+): UseMutationResult<
+        Awaited<ReturnType<typeof postApiSmsImprove>>,
+        TError,
+        {data: SmsImproveRequestDTODTO},
+        TContext
+      > => {
+
+      const mutationOptions = getPostApiSmsImproveMutationOptions(options);
+
+      return useMutation(mutationOptions);
+    }
+    
 export const getApiUsers = (
     params?: GetApiUsersParams,
  signal?: AbortSignal

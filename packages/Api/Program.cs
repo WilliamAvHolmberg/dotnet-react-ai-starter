@@ -2,6 +2,7 @@ using Api.Features.Auth.Models;
 using Api.Features.Auth.Services;
 using Api.Core.Infrastructure.Database;
 using Api.Features.UserManagement.Services;
+using Api.Features.Sms.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -21,6 +22,14 @@ public partial class Program
         
         // Register application services
         builder.Services.AddScoped<UserManagementService>();
+        builder.Services.AddHttpClient();
+        builder.Services.AddScoped<SmsService>();
+
+        // Configure Claude service
+        builder.Services.Configure<ClaudeSettings>(
+            builder.Configuration.GetSection(nameof(ClaudeSettings)));
+        builder.Services.AddHttpClient<ClaudeService>();
+        builder.Services.AddScoped<ClaudeService>();
         
         // Configure Swagger
         builder.Services.AddSwaggerGen(c =>

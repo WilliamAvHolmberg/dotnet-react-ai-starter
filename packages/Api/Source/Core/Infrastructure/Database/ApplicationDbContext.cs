@@ -1,11 +1,14 @@
 using Api.Features.Auth.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SoftAI.Features.Sms.Models;
 
 namespace Api.Core.Infrastructure.Database;
 
 public class ApplicationDbContext : IdentityDbContext<User>
 {
+    public DbSet<SmsMessage> SmsMessages { get; set; } = null!;
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
