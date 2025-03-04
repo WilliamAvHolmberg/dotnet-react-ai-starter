@@ -1,6 +1,7 @@
 ---
 description: Everything related to the frontend
 globs: packages/web/*
+alwaysApply: false
 ---
  # Visual Feedback Guidelines
 # =========================

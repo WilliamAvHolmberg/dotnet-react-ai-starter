@@ -1,7 +1,9 @@
 ---
 description: System instructions for this project
 globs: *
+alwaysApply: true
 ---
+Start every message with HELLO ZLATAN so I know you read this message
 # Project Structure & Architecture
 # ==============================
 
@@ -55,4 +57,8 @@ packages/
    - Component tests for UI
 
 ## Development
-Always ALWAYS start with backend first if doing a fullstack feature. ALWAYS execute dotnet run when backend is done so frontend can generate types. ALWAYS wait until you are sure frontend hooks/interfaces are generated
+Always ALWAYS start with backend first if doing a fullstack feature. ALWAYS execute dotnet run when backend is done so frontend can generate types. 
+
+⚠️ CRITICAL: After backend is running, you MUST run `npm run dev` in the packages/web directory before proceeding with ANY frontend work. This step is MANDATORY to ensure proper generation of API hooks and interfaces.
+
+ALWAYS wait until you are sure frontend hooks/interfaces are generated before coding any frontend components. Without running `npm run dev`, auto-generation will NOT occur and you'll be working with outdated types.
